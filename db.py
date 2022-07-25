@@ -9,6 +9,7 @@ def new_db():
     cursor.execute("""CREATE TABLE course (id_ int, first_name text, username text, about_course text)""")
     cursor.execute("""CREATE TABLE admins (id_ int)""")
     cursor.execute("""CREATE TABLE channels (id_ int)""")
+    conn.close()
 
 
 class DateBase:
@@ -18,4 +19,4 @@ class DateBase:
 
 
 if __name__ == '__main__':
-    print(5 / 1.75)
+    new_db()

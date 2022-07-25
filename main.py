@@ -6,7 +6,6 @@ dp = Dispatcher(bot=bot)
 
 @dp.message_handler(commands="start")
 async def start(message: types.Message):
-    print(message)
     await message.answer("hi bro")
 
 
