@@ -1,4 +1,6 @@
 import sqlite3
+import logging
+import datetime
 
 
 def new_db():
@@ -16,7 +18,52 @@ class DateBase:
     def __init__(self):
         self.conn = sqlite3.connect("multach_users.db")
         self.cursor = self.conn.cursor()
+        self.conn.row_factory = sqlite3.Row
+
+    def add_new_user(self, user_id: int) -> bool:
+        try:
+            self.cursor.execute("INSERT INTO users_id VALUES (?)", (user_id,))
+            self.conn.commit()
+            return True
+        except Exception as e:
+            time = str(datetime.datetime.now())
+            logging.warning(msg=time + " -*-add new user-*- " + str(e))
+            return False
+
+    def get_all_users_id(self) -> list:
+        try:
+            return [i[0] for i in self.cursor.execute("SELECT * FROM users_id").fetchall()]
+        except Exception as e:
+            time = str(datetime.datetime.now())
+            logging.warning(msg=time + " -*-get all users id-*- " + str(e))
+            return []
+
+    def delete_user(self, user_id: int) -> bool:
+        try:
+            self.cursor.execute("""DELETE FROM users_id WHERE id_ = ?""", (user_id,))
+            self.cursor.execute("""DELETE FROM users WHERE id_ = ?""", (user_id,))
+            self.cursor.execute("""DELETE FROM course WHERE id_ = ?""", (user_id,))
+            self.cursor.execute("""DELETE FROM admins WHERE id_ = ?""", (user_id,))
+            self.conn.commit()
+            return True
+        except Exception as e:
+            time = str(datetime.datetime.now())
+            logging.warning(msg=time + " -*-delete-*- " + str(e))
+            return False
+
+    def add_new_admin(self, user_id: int) -> bool:
+        try:
+            self.cursor.execute("INSERT INTO admins VALUES (?)", (user_id,))
+            self.conn.commit()
+            return True
+        except Exception as e:
+            time = str(datetime.datetime.now())
+            logging.warning(msg=time + " -*-add new admin-*- " + str(e))
+            return False
 
 
 if __name__ == '__main__':
-    new_db()
+    a = DateBase()
+    # a.add_new_user(812748924)
+    # print(a.get_all_users_id())
+    # a.delete_user(8375385)
