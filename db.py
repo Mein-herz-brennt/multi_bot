@@ -120,7 +120,7 @@ class DateBase:
 
 
 if __name__ == '__main__':
-    a = DateBase()
-    # a.add_new_user(812748924)
-    # print(a.get_all_users_id())
-    # a.delete_user(8375385)
+    # DateBase().add_new_user(812748924)
+    # print(DateBase().get_all_users_id())
+    # DateBase().delete_user(812748924)
+    pass
