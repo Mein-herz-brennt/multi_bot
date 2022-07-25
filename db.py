@@ -106,6 +106,18 @@ class DateBase:
         finally:
             self.conn.close()
 
+    def add_new_user_info(self, user_id: int, first_name: str, last_name: str, username: str) -> bool:
+        try:
+            self.cursor.execute("""INSERT INTO users VALUES (?,?,?,?)""", (user_id, first_name, last_name, username))
+            self.conn.commit()
+            return True
+        except Exception as e:
+            time = str(datetime.datetime.now())
+            logging.warning(msg=time + " -*-add new user-*- " + str(e))
+            return False
+        finally:
+            self.conn.close()
+
 
 if __name__ == '__main__':
     a = DateBase()

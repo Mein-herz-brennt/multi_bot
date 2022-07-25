@@ -12,7 +12,7 @@ async def start(message: types.Message):
 @dp.message_handler(commands="admin", commands_prefix="!")
 async def admin(message: types.Message):
     if message.from_user.id in DateBase().get_all_admins_id():
-        await message.answer("hi bos")
+        await message.answer("hi bos good day")
     else:
         await message.answer("hi bitch")
 
