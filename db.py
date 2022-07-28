@@ -8,9 +8,10 @@ def new_db():
     cursor = conn.cursor()
     cursor.execute("""CREATE TABLE users_id (id_ INTEGER NOT NULL PRIMARY KEY)""")
     cursor.execute(
-        """CREATE TABLE users (id_ INTEGER NOT NULL PRIMARY KEY, first_name text, last_name text, username text)""")
+        """CREATE TABLE users (id_ INTEGER NOT NULL PRIMARY KEY, first_name text, last_name text, username text, age int)""")
     cursor.execute(
-        """CREATE TABLE course_reg (id_ INTEGER NOT NULL PRIMARY KEY, first_name text, username text, course_name text, description text, pay text)""")
+        """CREATE TABLE course_reg (id_ INTEGER NOT NULL PRIMARY KEY, first_name text, username text, course_name 
+        text, description text, pay text)""")
     cursor.execute(
         """CREATE TABLE course 
         (name text, description text, name_of_teacher text)""")
@@ -114,9 +115,10 @@ class DateBase:
             self.conn.close()
 
     # work with new user
-    def add_new_user_info(self, user_id: int, first_name: str, last_name: str, username: str) -> bool:
+    def add_new_user_info(self, user_id: int, first_name: str, last_name: str, username: str, age: int) -> bool:
         try:
-            self.cursor.execute("""INSERT INTO users VALUES (?,?,?,?)""", (user_id, first_name, last_name, username))
+            self.cursor.execute("""INSERT INTO users VALUES (?,?,?,?,?)""",
+                                (user_id, first_name, last_name, username, age))
             self.conn.commit()
             return True
         except Exception as e:
