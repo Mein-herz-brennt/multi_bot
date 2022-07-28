@@ -6,16 +6,22 @@ import datetime
 def new_db():
     conn = sqlite3.connect("multach_users.db")
     cursor = conn.cursor()
-    cursor.execute("""CREATE TABLE users_id (id_ int)""")
-    cursor.execute("""CREATE TABLE users (id_ int, first_name text, last_name text, username text)""")
-    cursor.execute("""CREATE TABLE course_reg (id_ int, first_name text, username text, course_name text, description text, pay text)""")
-    cursor.execute("""CREATE TABLE course (course_id INTEGER NOT NULL PRIMARY KEY, name text, description text)""")
-    cursor.execute("""CREATE TABLE admins (id_ int)""")
-    cursor.execute("""CREATE TABLE channels (id_ int)""")
+    cursor.execute("""CREATE TABLE users_id (id_ INTEGER NOT NULL PRIMARY KEY)""")
+    cursor.execute(
+        """CREATE TABLE users (id_ INTEGER NOT NULL PRIMARY KEY, first_name text, last_name text, username text)""")
+    cursor.execute(
+        """CREATE TABLE course_reg (id_ INTEGER NOT NULL PRIMARY KEY, first_name text, username text, course_name text, description text, pay text)""")
+    cursor.execute(
+        """CREATE TABLE course 
+        (name text, description text, name_of_teacher text)""")
+    cursor.execute("""CREATE TABLE admins (id_ INTEGER NOT NULL PRIMARY KEY)""")
+    cursor.execute("""CREATE TABLE channels (id_ INTEGER NOT NULL PRIMARY KEY)""")
     conn.close()
 
 
 class DateBase:
+    counter = 0
+
     def __init__(self):
         self.conn = sqlite3.connect("multach_users.db")
         self.cursor = self.conn.cursor()
@@ -143,9 +149,10 @@ class DateBase:
             self.conn.close()
 
     # work with course
-    def new_course(self, name: str, description: str) -> bool:
+    def new_course(self, name: str, description: str, name_of_teacher: str) -> bool:
         try:
-            self.cursor.execute("INSERT INTO course VALUES (?, ?)", (name, description))
+            self.cursor.execute("INSERT INTO course (name, description, name_of_teacher) VALUES (?,?,?)",
+                                (name, description, name_of_teacher))
             self.conn.commit()
             return True
         except Exception as e:
@@ -167,9 +174,9 @@ class DateBase:
         finally:
             self.conn.close()
 
-    def delete_course(self, name: str) -> bool:
+    def delete_course(self, rowid: int) -> bool:
         try:
-            self.cursor.execute("DELETE FROM course WHERE name = ?", (name,))
+            self.cursor.execute("DELETE FROM course WHERE rowid = ?", (rowid,))
             self.conn.commit()
             return True
         except Exception as e:
@@ -179,10 +186,22 @@ class DateBase:
         finally:
             self.conn.close()
 
+    def get_all_info_about_course(self):
+        try:
+            return [{"rowid": i[0], "name": i[1], "description": i[2], "name_of_teacher": i[3]} for i in
+                    self.cursor.execute("""SELECT rowid, * FROM course""").fetchall()]
+        except Exception as e:
+            time = str(datetime.datetime.now())
+            logging.warning(msg=time + " -*-get all info about one user-*- " + str(e))
+            return []
+        finally:
+            self.conn.close()
+
+
 if __name__ == '__main__':
-    # new_db()
-    # DateBase().new_course("jfnjsd", "fdsfsd")
+    new_db()
+    # DateBase().new_course("jsddfvdfvdc", "fvdfvfbf")
     # print(DateBase().get_all_users_id())
     # DateBase().delete_user(812748924)
-    pass
-
+    # print(DateBase().get_all_info_about_course())
+    # print(DateBase().delete_course(4))
