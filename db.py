@@ -8,7 +8,7 @@ def new_db():
     cursor = conn.cursor()
     cursor.execute("""CREATE TABLE users_id (id_ int)""")
     cursor.execute("""CREATE TABLE users (id_ int, first_name text, last_name text, username text)""")
-    cursor.execute("""CREATE TABLE course_reg (id_ int, first_name text, username text, course_name text, description text, pay boolean)""")
+    cursor.execute("""CREATE TABLE course_reg (id_ int, first_name text, username text, course_name text, description text, pay text)""")
     cursor.execute("""CREATE TABLE course (name text, description text)""")
     cursor.execute("""CREATE TABLE admins (id_ int)""")
     cursor.execute("""CREATE TABLE channels (id_ int)""")
