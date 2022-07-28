@@ -9,7 +9,7 @@ def new_db():
     cursor.execute("""CREATE TABLE users_id (id_ int)""")
     cursor.execute("""CREATE TABLE users (id_ int, first_name text, last_name text, username text)""")
     cursor.execute("""CREATE TABLE course_reg (id_ int, first_name text, username text, course_name text, description text, pay text)""")
-    cursor.execute("""CREATE TABLE course (name text, description text)""")
+    cursor.execute("""CREATE TABLE course (course_id INTEGER NOT NULL PRIMARY KEY, name text, description text)""")
     cursor.execute("""CREATE TABLE admins (id_ int)""")
     cursor.execute("""CREATE TABLE channels (id_ int)""")
     conn.close()
@@ -142,10 +142,47 @@ class DateBase:
         finally:
             self.conn.close()
 
+    # work with course
+    def new_course(self, name: str, description: str) -> bool:
+        try:
+            self.cursor.execute("INSERT INTO course VALUES (?, ?)", (name, description))
+            self.conn.commit()
+            return True
+        except Exception as e:
+            time = str(datetime.datetime.now())
+            logging.warning(msg=time + " -*-add new course-*- " + str(e))
+            return False
+        finally:
+            self.conn.close()
+
+    def update_course_description(self, name: str, description: str) -> bool:
+        try:
+            self.cursor.execute("UPDATE course SET description = ? WHERE name = ?", (description, name))
+            self.conn.commit()
+            return True
+        except Exception as e:
+            time = str(datetime.datetime.now())
+            logging.warning(msg=time + " -*-update course-*- " + str(e))
+            return False
+        finally:
+            self.conn.close()
+
+    def delete_course(self, name: str) -> bool:
+        try:
+            self.cursor.execute("DELETE FROM course WHERE name = ?", (name,))
+            self.conn.commit()
+            return True
+        except Exception as e:
+            time = str(datetime.datetime.now())
+            logging.warning(msg=time + " -*-delete course-*- " + str(e))
+            return False
+        finally:
+            self.conn.close()
 
 if __name__ == '__main__':
-    new_db()
-    # DateBase().add_new_user(812748924)
+    # new_db()
+    # DateBase().new_course("jfnjsd", "fdsfsd")
     # print(DateBase().get_all_users_id())
     # DateBase().delete_user(812748924)
+    pass
 
