@@ -8,7 +8,8 @@ def new_db():
     cursor = conn.cursor()
     cursor.execute("""CREATE TABLE users_id (id_ int)""")
     cursor.execute("""CREATE TABLE users (id_ int, first_name text, last_name text, username text)""")
-    cursor.execute("""CREATE TABLE course (id_ int, first_name text, username text, about_course text)""")
+    cursor.execute("""CREATE TABLE course_reg (id_ int, first_name text, username text, course_name text, description text, pay boolean)""")
+    cursor.execute("""CREATE TABLE course (name text, description text)""")
     cursor.execute("""CREATE TABLE admins (id_ int)""")
     cursor.execute("""CREATE TABLE channels (id_ int)""")
     conn.close()
@@ -47,7 +48,7 @@ class DateBase:
         try:
             self.cursor.execute("""DELETE FROM users_id WHERE id_ = ?""", (user_id,))
             self.cursor.execute("""DELETE FROM users WHERE id_ = ?""", (user_id,))
-            self.cursor.execute("""DELETE FROM course WHERE id_ = ?""", (user_id,))
+            self.cursor.execute("""DELETE FROM course_reg WHERE id_ = ?""", (user_id,))
             self.cursor.execute("""DELETE FROM admins WHERE id_ = ?""", (user_id,))
             self.conn.commit()
             return True
@@ -143,7 +144,8 @@ class DateBase:
 
 
 if __name__ == '__main__':
+    new_db()
     # DateBase().add_new_user(812748924)
     # print(DateBase().get_all_users_id())
     # DateBase().delete_user(812748924)
-    pass
+
